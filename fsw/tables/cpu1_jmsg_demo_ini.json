@@ -1,0 +1,30 @@
+{
+   "title": "JMSG Demo initialization file",
+   "description": ["Define runtime configurations",
+                   "USE_CASE_TASK_DELAY: Millisecond delay between use case executions"],
+   "config": {
+      
+      "APP_CFE_NAME": "JMSG_DEMO",      
+      "APP_MAIN_PERF_ID": 99,
+      "APP_CMD_PIPE_NAME":  "JMSG_DEMO",
+      "APP_CMD_PIPE_DEPTH": 8,
+      
+      "JMSG_DEMO_CMD_TOPICID" : 0,
+      "JMSG_DEMO_STATUS_TLM_TOPICID": 0,
+      "JMSG_DEMO_MQTT_DISCRETE_TLM_TOPICID": 0,
+      "JMSG_DEMO_MQTT_RATE_TLM_TOPICID": 0,
+      "JMSG_DEMO_UDP_RPI_TLM_TOPICID": 0,
+      "JMSG_LIB_TOPIC_CSV_CMD_TOPICID": 0,
+      "JMSG_LIB_TOPIC_CSV_TLM_TOPICID": 0,
+      "JMSG_LIB_TOPIC_SCRIPT_CMD_TOPICID": 0,
+      "BC_SCH_2_SEC_TOPICID": 0,
+
+      "CHILD_NAME":       "JMSG_DEMO_CHILD",
+      "CHILD_PERF_ID":    44,
+      "CHILD_STACK_SIZE": 16384,
+      "CHILD_PRIORITY":   80,
+      
+      "USE_CASE_TASK_DELAY": 1000
+
+   }
+}

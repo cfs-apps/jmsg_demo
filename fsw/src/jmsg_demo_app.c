@@ -61,14 +61,16 @@ DEFINE_ENUM(Config,APP_CONFIG)
 
 static CFE_EVS_BinFilter_t  EventFilters[] =
 {  
-   /* Event ID                           Mask */
+   /* Event ID                             Mask */
    {PKTUTIL_CSV_PARSE_ERR_EID,             CFE_EVS_FIRST_4_STOP},
    {MQTT_DEMO_CSV_TO_DISCRETE_TLM_EID,     CFE_EVS_FIRST_4_STOP},
    {MQTT_DEMO_CREATE_DISCRETE_CSV_CMD_EID, CFE_EVS_FIRST_4_STOP},
    {MQTT_DEMO_CSV_TO_RATE_TLM_EID,         CFE_EVS_FIRST_4_STOP},
    {MQTT_DEMO_CREATE_RATE_CSV_CMD_EID,     CFE_EVS_FIRST_4_STOP},
    {UDP_DEMO_CREATE_RPI_CSV_CMD_EID,       CFE_EVS_FIRST_4_STOP},
-   {UDP_DEMO_CSV_TO_RPI_TLM_EID,           CFE_EVS_FIRST_4_STOP}
+   {UDP_DEMO_CSV_TO_RPI_TLM_EID,           CFE_EVS_FIRST_4_STOP},
+   {UDP_DEMO_CREATE_SCRIPT_CMD_EID,        CFE_EVS_FIRST_4_STOP}
+
 };
 
 // See jmsg_demo.xml UseCase enumeration
@@ -78,7 +80,7 @@ static const char *UseCaseEnumStr[] =
    "MQTT_RATE",
    "UDP_RPI",
    "UDP_SCRIPT",
-   "NONE" 
+   "IDLE" 
 };
 
 
@@ -86,7 +88,7 @@ static const char *UseCaseEnumStr[] =
 /** Global Data **/
 /*****************/
 
-JMSG_DEMO_APP_Class_t   JMsgDemoApp;
+JMSG_DEMO_APP_Class_t  JMsgDemoApp;
 
 
 /******************************************************************************
@@ -241,7 +243,7 @@ bool MQTT_DEMO_APP_StopUseCase(void *ObjDataPtr, const CFE_MSG_Message_t *MsgPtr
     
    JMsgDemoApp.InitUseCase    = true;
    JMsgDemoApp.UseCaseRunning = false;
-   JMsgDemoApp.UseCase        = JMSG_DEMO_UseCaseTlm_NONE;
+   JMsgDemoApp.UseCase        = JMSG_DEMO_UseCaseTlm_IDLE;
   
    return RetStatus;    
    
@@ -251,10 +253,9 @@ bool MQTT_DEMO_APP_StopUseCase(void *ObjDataPtr, const CFE_MSG_Message_t *MsgPtr
 /******************************************************************************
 ** Function: DispatchCsvTlmConverter
 **
-**  Calls the 
-**
 ** Notes:
-**   None
+**   1. The switch statement is not type consistent (switch on UseCaseTlm and
+**      cases are UseCaseCmd) but it reads better and the values are identical
 **
 */
 static void DispatchCsvTlmConverter(const CFE_MSG_Message_t *TopicCsvCmd)
@@ -264,13 +265,13 @@ static void DispatchCsvTlmConverter(const CFE_MSG_Message_t *TopicCsvCmd)
    {
       switch(JMsgDemoApp.UseCase)
       {
-         case JMSG_DEMO_UseCaseTlm_MQTT_DISCRETE:
+         case JMSG_DEMO_UseCaseCmd_MQTT_DISCRETE:
             MQTT_DEMO_CsvToDiscreteTlm(TopicCsvCmd);
             break;
-         case JMSG_DEMO_UseCaseTlm_MQTT_RATE:
+         case JMSG_DEMO_UseCaseCmd_MQTT_RATE:
             MQTT_DEMO_CsvToRateTlm(TopicCsvCmd);
             break;
-         case JMSG_DEMO_UseCaseTlm_UDP_RPI:
+         case JMSG_DEMO_UseCaseCmd_UDP_RPI:
             UDP_DEMO_CsvToRpiTlm(TopicCsvCmd);
             break;
          default:
@@ -278,7 +279,7 @@ static void DispatchCsvTlmConverter(const CFE_MSG_Message_t *TopicCsvCmd)
                               "Corrupted use case identifier. Value=%d. Terminating use case execution.", 
                               JMsgDemoApp.UseCase);
             JMsgDemoApp.UseCaseRunning = false;
-            JMsgDemoApp.UseCase        = JMSG_DEMO_UseCaseTlm_NONE;
+            JMsgDemoApp.UseCase        = JMSG_DEMO_UseCaseTlm_IDLE;
             break;                              
       }
    
@@ -299,7 +300,7 @@ static int32 InitApp(void)
    CHILDMGR_TaskInit_t ChildTaskInit;  
       
    memset(&JMsgDemoApp, 0, sizeof(JMSG_DEMO_APP_Class_t));
-   JMsgDemoApp.UseCase = JMSG_DEMO_UseCaseTlm_NONE;
+   JMsgDemoApp.UseCase = JMSG_DEMO_UseCaseTlm_IDLE;
    
    /*
    ** Read JSON INI Table & class variable defaults defined in JSON  
@@ -457,9 +458,10 @@ void SendStatusPkt(void)
    ** UDP Demo
    */
    
-   Payload->UdpCreateRpiCnt = JMsgDemoApp.UdpDemo.CreateRpiCsvCmdCnt;
-   Payload->UdpCsvToRpiCnt  = JMsgDemoApp.UdpDemo.CsvToRpiCnt;
-       
+   Payload->UdpCreateRpiCsvCmdCnt = JMsgDemoApp.UdpDemo.CreateRpiCsvCmdCnt;
+   Payload->UdpCreateScriptCmdCnt = JMsgDemoApp.UdpDemo.CreateScriptCmdCnt;
+   Payload->UdpCsvToRpiTlmCnt     = JMsgDemoApp.UdpDemo.CsvToRpiTlmCnt;
+          
    CFE_SB_TimeStampMsg(CFE_MSG_PTR(JMsgDemoApp.StatusTlm.TelemetryHeader));
    CFE_SB_TransmitMsg(CFE_MSG_PTR(JMsgDemoApp.StatusTlm.TelemetryHeader), true);
 
@@ -473,8 +475,9 @@ void SendStatusPkt(void)
 **   1. Returning false causes the child task to terminate.
 **   2. Information events are sent because this is instructional code and the
 **      events provide feedback. The events are filtered so they won't flood
-**      the ground. A reset app command resets the event filter.  
-**
+**      the ground. A reset app command resets the event filter.
+**   3. The switch statement is not type consistent (switch on UseCaseTlm and
+**      cases are UseCaseCmd) but it reads better and the values are identical
 */
 bool UseCaseChildTask(CHILDMGR_Class_t *ChildMgr)
 {
@@ -485,16 +488,16 @@ bool UseCaseChildTask(CHILDMGR_Class_t *ChildMgr)
    {
       switch(JMsgDemoApp.UseCase)
       {
-         case JMSG_DEMO_UseCaseTlm_MQTT_DISCRETE:
+         case JMSG_DEMO_UseCaseCmd_MQTT_DISCRETE:
             MQTT_DEMO_CreateDiscreteCsvCmd(JMsgDemoApp.InitUseCase);
             break;
-         case JMSG_DEMO_UseCaseTlm_MQTT_RATE:
+         case JMSG_DEMO_UseCaseCmd_MQTT_RATE:
             MQTT_DEMO_CreateRateCsvCmd(JMsgDemoApp.InitUseCase);
             break;
-         case JMSG_DEMO_UseCaseTlm_UDP_RPI:
+         case JMSG_DEMO_UseCaseCmd_UDP_RPI:
             UDP_DEMO_CreateRpiCsvCmd(JMsgDemoApp.InitUseCase);
             break;
-         case JMSG_DEMO_UseCaseTlm_UDP_SCRIPT:
+         case JMSG_DEMO_UseCaseCmd_UDP_SCRIPT:
             UDP_DEMO_CreateScriptCmd(JMsgDemoApp.InitUseCase);
             break;
 
@@ -503,7 +506,7 @@ bool UseCaseChildTask(CHILDMGR_Class_t *ChildMgr)
                               "Corrupted use case identifier. Value=%d. Terminating use case execution.", 
                               JMsgDemoApp.UseCase);
             JMsgDemoApp.UseCaseRunning = false;
-            JMsgDemoApp.UseCase        = JMSG_DEMO_UseCaseTlm_NONE;
+            JMsgDemoApp.UseCase        = JMSG_DEMO_UseCaseTlm_IDLE;
             break;                              
       }
       JMsgDemoApp.InitUseCase = false;
@@ -528,14 +531,12 @@ bool UseCaseChildTask(CHILDMGR_Class_t *ChildMgr)
 static const char *UseCaseStr(JMSG_DEMO_UseCaseTlm_Enum_t UseCase)
 {
    
-   uint8 i = JMSG_DEMO_UseCaseTlm_NONE;
+   uint8 i = JMSG_DEMO_UseCaseTlm_IDLE;
    
    if ( UseCase >= JMSG_DEMO_UseCaseCmd_Enum_t_MIN &&
         UseCase <= JMSG_DEMO_UseCaseCmd_Enum_t_MAX)
    {
-   
       i = UseCase;
-   
    }
         
    return UseCaseEnumStr[i];

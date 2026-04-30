@@ -42,14 +42,18 @@
 ** Versions:
 **
 ** 1.0 - Initial release tested with jmsg_lib 1.0 and jmsg_udp 2.0
-** 2.0 - Compatible with Basecamp 4.0 and cFS 7.0
-**
+** 1.1 - Updates for JMSG project initial release
 */
 
-#define  JMSG_DEMO_APP_MAJOR_VER   2
-#define  JMSG_DEMO_APP_MINOR_VER   0
+#define  JMSG_DEMO_APP_MAJOR_VER   1
+#define  JMSG_DEMO_APP_MINOR_VER   1
 
-#define JMSG_DEMO_CSV_PARAM_TEXT_LEN  sizeof(JMSG_LIB_TopicCsvCmd_Payload_t)
+/*
+** Max lengths of variable length command parameter text fields
+*/
+#define JMSG_DEMO_CSV_CMD_PARAM_TEXT_LEN  sizeof(JMSG_LIB_CmdParamString_String_t)
+#define JMSG_DEMO_SCRIPT_CMD_TEXT_LEN     sizeof(JMSG_LIB_CmdScriptString_String_t)
+
 
 /******************************************************************************
 ** Init File declarations create:

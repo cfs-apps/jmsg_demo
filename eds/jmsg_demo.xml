@@ -34,24 +34,29 @@
       <!--**** DataTypeSet:  Entry Types ****-->
       <!--***********************************-->
       
+      <Define name="UC_MQTT_DISCRETE" value="0" />
+      <Define name="UC_MQTT_RATE"     value="1" />
+      <Define name="UC_UDP_RPI"       value="2" />
+      <Define name="UC_UDP_SCRIPT"    value="3" />
+      <Define name="UC_IDLE"          value="4" />
       <EnumeratedDataType name="UseCaseCmd" shortDescription="Define use case command options">
         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
         <EnumerationList>
-          <Enumeration label="MQTT_DISCRETE"  value="0"  shortDescription="" />
-          <Enumeration label="MQTT_RATE"      value="1"  shortDescription="" />
-          <Enumeration label="UDP_RPI"        value="2"  shortDescription="" />
-          <Enumeration label="UDP_SCRIPT"     value="3"  shortDescription="" />
+          <Enumeration label="MQTT_DISCRETE"  value="${UC_MQTT_DISCRETE}" shortDescription="" />
+          <Enumeration label="MQTT_RATE"      value="${UC_MQTT_RATE}"     shortDescription="" />
+          <Enumeration label="UDP_RPI"        value="${UC_UDP_RPI}"       shortDescription="" />
+          <Enumeration label="UDP_SCRIPT"     value="${UC_UDP_SCRIPT}"    shortDescription="" />
         </EnumerationList>
       </EnumeratedDataType>
 
-      <EnumeratedDataType name="UseCaseTlm" shortDescription="Must duplicate Cmd options with added NONE">
+      <EnumeratedDataType name="UseCaseTlm" shortDescription="Use case display values in telemetry. Duplicate Cmd options with added IDLE">
         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
         <EnumerationList>
-          <Enumeration label="MQTT_DISCRETE"  value="0"  shortDescription="" />
-          <Enumeration label="MQTT_RATE"      value="1"  shortDescription="" />
-          <Enumeration label="UDP_RPI"        value="2"  shortDescription="" />
-          <Enumeration label="UDP_SCRIPT"     value="3"  shortDescription="" />
-          <Enumeration label="NONE"           value="4"  shortDescription="" />
+          <Enumeration label="MQTT_DISCRETE"  value="${UC_MQTT_DISCRETE}" shortDescription="" />
+          <Enumeration label="MQTT_RATE"      value="${UC_MQTT_RATE}"     shortDescription="" />
+          <Enumeration label="UDP_RPI"        value="${UC_UDP_RPI}"       shortDescription="" />
+          <Enumeration label="UDP_SCRIPT"     value="${UC_UDP_SCRIPT}"    shortDescription="" />
+          <Enumeration label="IDLE"           value="${UC_IDLE}"          shortDescription="" />
         </EnumerationList>
       </EnumeratedDataType>
 
@@ -73,13 +78,23 @@
         </EnumerationList>
       </EnumeratedDataType>
             
-      <EnumeratedDataType name="RpiParams" shortDescription="Define telemetry parameters. These are indices, values must start at 0 and increment by 1">
+      <EnumeratedDataType name="RpiCmds" shortDescription="Define commands sent to the RPI">
         <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
         <EnumerationList>
-          <Enumeration label="RATE_X"   value="0"    shortDescription="" />
-          <Enumeration label="RATE_Y"   value="1"    shortDescription="" />
-          <Enumeration label="RATE_Z"   value="2"    shortDescription="" />
-          <Enumeration label="LUX"      value="3"    shortDescription="" />
+          <Enumeration label="START"   value="0"   shortDescription="" />
+          <Enumeration label="EXECUTE" value="1"   shortDescription="" />
+          <Enumeration label="STOP"    value="2"   shortDescription="" />
+        </EnumerationList>
+      </EnumeratedDataType>
+
+      <EnumeratedDataType name="RpiTlmParams" shortDescription="Define telemetry parameters received from RPI. These are indices, values must start at 0 and increment by 1">
+        <IntegerDataEncoding sizeInBits="16" encoding="unsigned" />
+        <EnumerationList>
+          <Enumeration label="DELTA_T"  value="0"    shortDescription="" />
+          <Enumeration label="RATE_X"   value="1"    shortDescription="" />
+          <Enumeration label="RATE_Y"   value="2"    shortDescription="" />
+          <Enumeration label="RATE_Z"   value="3"    shortDescription="" />
+          <Enumeration label="LUX"      value="4"    shortDescription="" />
         </EnumerationList>
       </EnumeratedDataType>
             
@@ -109,8 +124,9 @@
           <Entry name="MqttCsvToDiscreteCnt"        type="BASE_TYPES/uint16"  />
           <Entry name="MqttCreateRateCsvCmdCnt"     type="BASE_TYPES/uint16"  />
           <Entry name="MqttCsvToRateCnt"            type="BASE_TYPES/uint16"  />
-          <Entry name="UdpCreateRpiCnt"             type="BASE_TYPES/uint16"  />
-          <Entry name="UdpCsvToRpiCnt"              type="BASE_TYPES/uint16"  />
+          <Entry name="UdpCreateRpiCsvCmdCnt"       type="BASE_TYPES/uint16"  />
+          <Entry name="UdpCreateScriptCmdCnt"       type="BASE_TYPES/uint16"  />
+          <Entry name="UdpCsvToRpiTlmCnt"           type="BASE_TYPES/uint16"  />
         </EntryList>
       </ContainerDataType>
       
@@ -132,6 +148,7 @@
       
       <ContainerDataType name="UdpRpiTlm_Payload" shortDescription="">
         <EntryList>
+          <Entry name="DeltaT"   type="BASE_TYPES/float"   />
           <Entry name="RateX"    type="BASE_TYPES/float"   />
           <Entry name="RateY"    type="BASE_TYPES/float"   />
           <Entry name="RateZ"    type="BASE_TYPES/float"   />

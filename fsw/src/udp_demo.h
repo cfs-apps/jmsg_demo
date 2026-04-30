@@ -18,7 +18,7 @@
 **   telmeetry CSV parameters
 **
 ** Notes:
-**   1. This 
+**   None
 **
 */
 
@@ -42,9 +42,10 @@
 ** Event Message IDs
 */
 
-#define UDP_DEMO_CREATE_RPI_CSV_CMD_EID  (UDP_DEMO_BASE_EID + 0)
-#define UDP_DEMO_CSV_TO_RPI_TLM_EID      (UDP_DEMO_BASE_EID + 1)
-#define UDP_DEMO_CREATE_SCRIPT_CMD_EID   (UDP_DEMO_BASE_EID + 2)
+#define UDP_DEMO_CONSTRUCTOR_EID         (UDP_DEMO_BASE_EID + 0)
+#define UDP_DEMO_CREATE_RPI_CSV_CMD_EID  (UDP_DEMO_BASE_EID + 1)
+#define UDP_DEMO_CSV_TO_RPI_TLM_EID      (UDP_DEMO_BASE_EID + 2)
+#define UDP_DEMO_CREATE_SCRIPT_CMD_EID   (UDP_DEMO_BASE_EID + 3)
 
 
 /**********************/
@@ -67,20 +68,12 @@ typedef struct
    JMSG_LIB_TopicCsvCmd_t     TopicCsvCmd;
    JMSG_LIB_TopicScriptCmd_t  TopicScriptCmd;
    JMSG_DEMO_UdpRpiTlm_t      RpiTlm;
-
-   double              TestRate;
-   double              TestRateAxisX;
-   double              TestRateAxisY;
-   double              TestRateAxisZ;
-   UDP_DEMO_TestAxis_t TestAxis;
-   uint16              TestRateAxisCycleLim;  /* Number of execution cycles to perform on each axis */
-   uint16              TestRateAxisCycleCnt;
-   uint16              TestLux;
    
-   uint16  CsvToRpiCnt;
+   uint16  RpiTlmParamEntries;
    uint16  CreateRpiCsvCmdCnt;
-   uint16  CreateRpiCsvPeriod;
-   
+   uint16  CreateScriptCmdCnt;
+   uint16  CsvToRpiTlmCnt;
+
 } UDP_DEMO_Class_t;
 
 

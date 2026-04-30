@@ -122,7 +122,7 @@ void MQTT_DEMO_Constructor(MQTT_DEMO_Class_t *MqttDemoPtr, const INITBL_Class_t 
 */
 void MQTT_DEMO_CreateDiscreteCsvCmd(bool Init)
 {
-   char ParamText[JMSG_DEMO_CSV_PARAM_TEXT_LEN];
+   char ParamText[JMSG_DEMO_CSV_CMD_PARAM_TEXT_LEN];
    
    if (Init)
    {
@@ -174,15 +174,15 @@ void MQTT_DEMO_CreateDiscreteCsvCmd(bool Init)
 void MQTT_DEMO_CreateRateCsvCmd(bool Init)
 {
 
-   char ParamText[JMSG_DEMO_CSV_PARAM_TEXT_LEN];
+   char ParamText[JMSG_DEMO_CSV_CMD_PARAM_TEXT_LEN];
    double RateTest90DegPeriod = RATE_TEST_90_DEG_TIME/((double)MqttDemo->CreateRateCsvPeriod/1000.0);
    
    if (Init)
    {
       
       /*
-      ** Goal is to rotate 90 degree per axis in a short enough time to keep the 
-      ** user interested if they're watching a graphic
+      ** Goal is to rotate 90 degree per axis in a short enough time 
+      ** to keep the user interested if they're watching a graphic
       ** - 9s for 90 degree rotation seems reasonable
       ** - Delta time = 9s / (child task delay / 1000)
       ** - Constant rate = 90 deg / Delta Time

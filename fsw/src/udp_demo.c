@@ -34,8 +34,6 @@
 /** Macro Definitions **/
 /***********************/
 
-#define RATE_TEST_90_DEG_TIME  9.0   /* Number of seconds to rotate 90 degrees */
-
 
 /**********************/
 /** Type Definitions **/
@@ -131,7 +129,7 @@ void UDP_DEMO_CreateRpiCsvCmd(bool Init)
       strcpy(Payload->Name,"UDP RPI");
    }
 
-   memset(Payload->ParamText, 0, JMSG_PLATFORM_TOPIC_STRING_MAX_LEN);
+   memset(Payload->ParamText, 0, JMSG_PLATFORM_JMSG_PAYLOAD_STRING_MAX_LEN);
    sprintf(ParamText,"\"cmd_code\": 0, \"cmd_param_1\": %d",UdpDemo->CreateRpiCsvCmdCnt);
    strcpy(Payload->ParamText, ParamText);
    
@@ -167,7 +165,7 @@ bool UDP_DEMO_CreateScriptCmd(bool Init)
    }
  
    memset(Payload->ScriptFile, 0, OS_MAX_PATH_LEN);
-   memset(Payload->ScriptText, 0, JMSG_PLATFORM_TOPIC_STRING_MAX_LEN);
+   memset(Payload->ScriptText, 0, JMSG_PLATFORM_JMSG_PAYLOAD_STRING_MAX_LEN);
    
    if (UdpDemo->CreateScriptCmdCnt % 2)
    {

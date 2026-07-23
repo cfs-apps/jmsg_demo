@@ -83,7 +83,7 @@ void UDP_DEMO_Constructor(UDP_DEMO_Class_t *UdpDemoPtr, const INITBL_Class_t *In
    
    memset(UdpDemo, 0, sizeof(UDP_DEMO_Class_t));
    
-   // See jmsg_lib.xml comments for why Topic Commands are defined as a telemetry message
+   // See jmsg_lib.xml comments for why Topic Commands are defined as telemetry messages
    CFE_MSG_Init(CFE_MSG_PTR(UdpDemo->TopicCsvCmd.TelemetryHeader), 
                 CFE_SB_ValueToMsgId(INITBL_GetIntConfig(IniTbl, CFG_JMSG_LIB_TOPIC_CSV_CMD_TOPICID)),
                 sizeof(JMSG_LIB_TopicCsvCmd_t));

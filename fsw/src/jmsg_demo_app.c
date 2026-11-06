@@ -319,7 +319,7 @@ static int32 InitApp(void)
       UDP_DEMO_Constructor(&(JMsgDemoApp.UdpDemo), INITBL_OBJ);
 
       JMsgDemoApp.CmdMid             = CFE_SB_ValueToMsgId(INITBL_GetIntConfig(INITBL_OBJ, CFG_JMSG_DEMO_CMD_TOPICID));
-      JMsgDemoApp.SendStatusMid      = CFE_SB_ValueToMsgId(INITBL_GetIntConfig(INITBL_OBJ, CFG_SEND_STATUS_TLM_TOPICID));
+      JMsgDemoApp.SendStatusTlmMid   = CFE_SB_ValueToMsgId(INITBL_GetIntConfig(INITBL_OBJ, CFG_JMSG_DEMO_SEND_STATUS_TLM_TOPICID));
       JMsgDemoApp.JmsgTopicCsvTlmMid = CFE_SB_ValueToMsgId(INITBL_GetIntConfig(INITBL_OBJ, JMSG_LIB_TOPIC_CSV_TLM_TOPICID));
 
       /* Constructor sends error events */    
@@ -334,15 +334,15 @@ static int32 InitApp(void)
  
       CFE_SB_CreatePipe(&JMsgDemoApp.CmdPipe, INITBL_GetIntConfig(INITBL_OBJ, CFG_APP_CMD_PIPE_DEPTH), INITBL_GetStrConfig(INITBL_OBJ, CFG_APP_CMD_PIPE_NAME));  
       CFE_SB_Subscribe(JMsgDemoApp.CmdMid, JMsgDemoApp.CmdPipe);
-      CFE_SB_Subscribe(JMsgDemoApp.SendStatusMid, JMsgDemoApp.CmdPipe);
+      CFE_SB_Subscribe(JMsgDemoApp.SendStatusTlmMid, JMsgDemoApp.CmdPipe);
       CFE_SB_Subscribe(JMsgDemoApp.JmsgTopicCsvTlmMid, JMsgDemoApp.CmdPipe);
 
       CMDMGR_Constructor(CMDMGR_OBJ);
-      CMDMGR_RegisterFunc(CMDMGR_OBJ, JMSG_DEMO_NOOP_CC,  NULL, JMSG_DEMO_APP_NoOpCmd,     0);
-      CMDMGR_RegisterFunc(CMDMGR_OBJ, JMSG_DEMO_RESET_CC, NULL, JMSG_DEMO_APP_ResetAppCmd, 0);
+      CMDMGR_RegisterFunc(CMDMGR_OBJ, EDS_CONTAINER_JMSG_DEMO_NOOP_CC,  NULL, JMSG_DEMO_APP_NoOpCmd,     0);
+      CMDMGR_RegisterFunc(CMDMGR_OBJ, EDS_CONTAINER_JMSG_DEMO_RESET_CC, NULL, JMSG_DEMO_APP_ResetAppCmd, 0);
 
-      CMDMGR_RegisterFunc(CMDMGR_OBJ, JMSG_DEMO_START_USE_CASE_CC, NULL, MQTT_DEMO_APP_StartUseCase, sizeof(JMSG_DEMO_StartUseCase_CmdPayload_t));
-      CMDMGR_RegisterFunc(CMDMGR_OBJ, JMSG_DEMO_STOP_USE_CASE_CC,  NULL, MQTT_DEMO_APP_StopUseCase,  0);
+      CMDMGR_RegisterFunc(CMDMGR_OBJ, EDS_CONTAINER_JMSG_DEMO_START_USE_CASE_CC, NULL, MQTT_DEMO_APP_StartUseCase, sizeof(JMSG_DEMO_StartUseCase_CmdPayload_t));
+      CMDMGR_RegisterFunc(CMDMGR_OBJ, EDS_CONTAINER_JMSG_DEMO_STOP_USE_CASE_CC,  NULL, MQTT_DEMO_APP_StopUseCase,  0);
       
       CFE_MSG_Init(CFE_MSG_PTR(JMsgDemoApp.StatusTlm.TelemetryHeader), CFE_SB_ValueToMsgId(INITBL_GetIntConfig(INITBL_OBJ, CFG_JMSG_DEMO_STATUS_TLM_TOPICID)), sizeof(JMSG_DEMO_StatusTlm_t));
 
@@ -392,7 +392,7 @@ static int32 ProcessCommands(void)
          {
             CMDMGR_DispatchFunc(CMDMGR_OBJ, &SbBufPtr->Msg);
          } 
-         else if (CFE_SB_MsgId_Equal(MsgId, JMsgDemoApp.SendStatusMid))
+         else if (CFE_SB_MsgId_Equal(MsgId, JMsgDemoApp.SendStatusTlmMid))
          {   
             SendStatusPkt();
          }

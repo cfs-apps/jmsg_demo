@@ -71,7 +71,7 @@ typedef struct
    ** Telemetry Packets
    */
    
-   JMSG_DEMO_StatusTlm_t   StatusTlm;
+   JMSG_DEMO_StatusTlm_t  SendStatusTlmMid;
 
    
    /*

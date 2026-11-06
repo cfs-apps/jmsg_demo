@@ -44,10 +44,11 @@
 ** 1.0 - Initial release tested with jmsg_lib 1.0 and jmsg_udp 2.0
 ** 1.1 - Updates for JMSG project initial release
 ** 3.1 - Compatible with Basecamp 3.x new app version management
+** 4.0 - Updated to cFS 7.0 (Basecamp 4.0 release)
 */
 
-#define  JMSG_DEMO_APP_MAJOR_VER   3
-#define  JMSG_DEMO_APP_MINOR_VER   1
+#define  JMSG_DEMO_APP_MAJOR_VER   4
+#define  JMSG_DEMO_APP_MINOR_VER   0
 
 /*
 ** Max lengths of variable length command parameter text fields
@@ -80,6 +81,7 @@
 #define CFG_APP_CMD_PIPE_NAME   APP_CMD_PIPE_NAME
 #define CFG_APP_CMD_PIPE_DEPTH  APP_CMD_PIPE_DEPTH
 
+#define CFG_JMSG_DEMO_SEND_STATUS_TLM_TOPICID    BC_SCH_2_SEC_TOPICID  // Use different CFG_ name instead of BC_SCH_*_TOPICID to localize impact if rate changes
 #define CFG_JMSG_DEMO_CMD_TOPICID                JMSG_DEMO_CMD_TOPICID
 #define CFG_JMSG_DEMO_STATUS_TLM_TOPICID         JMSG_DEMO_STATUS_TLM_TOPICID
 #define CFG_JMSG_DEMO_MQTT_DISCRETE_TLM_TOPICID  JMSG_DEMO_MQTT_DISCRETE_TLM_TOPICID
@@ -88,7 +90,6 @@
 #define CFG_JMSG_LIB_TOPIC_CSV_CMD_TOPICID       JMSG_LIB_TOPIC_CSV_CMD_TOPICID
 #define CFG_JMSG_LIB_TOPIC_CSV_TLM_TOPICID       JMSG_LIB_TOPIC_CSV_TLM_TOPICID
 #define CFG_JMSG_LIB_TOPIC_SCRIPT_CMD_TOPICID    JMSG_LIB_TOPIC_SCRIPT_CMD_TOPICID
-#define CFG_SEND_STATUS_TLM_TOPICID              BC_SCH_2_SEC_TOPICID
       
 #define CFG_CHILD_NAME       CHILD_NAME
 #define CFG_CHILD_PERF_ID    CHILD_PERF_ID
@@ -103,6 +104,7 @@
    XX(APP_MAIN_PERF_ID,uint32) \
    XX(APP_CMD_PIPE_NAME,char*) \
    XX(APP_CMD_PIPE_DEPTH,uint32) \
+   XX(BC_SCH_2_SEC_TOPICID,uint32) \
    XX(JMSG_DEMO_CMD_TOPICID,uint32) \
    XX(JMSG_DEMO_STATUS_TLM_TOPICID,uint32) \
    XX(JMSG_DEMO_MQTT_DISCRETE_TLM_TOPICID,uint32) \
@@ -111,7 +113,6 @@
    XX(JMSG_LIB_TOPIC_CSV_CMD_TOPICID,uint32) \
    XX(JMSG_LIB_TOPIC_CSV_TLM_TOPICID,uint32) \
    XX(JMSG_LIB_TOPIC_SCRIPT_CMD_TOPICID,uint32) \
-   XX(BC_SCH_2_SEC_TOPICID,uint32) \
    XX(CHILD_NAME,char*) \
    XX(CHILD_PERF_ID,uint32) \
    XX(CHILD_STACK_SIZE,uint32) \
@@ -137,8 +138,8 @@ DECLARE_ENUM(Config,APP_CONFIG)
 ** exceeded so it is the developer's responsibility to verify the ranges. 
 */
 
-#define JMSG_DEMO_APP_BASE_EID  (APP_C_FW_APP_BASE_EID +  0)
-#define MQTT_DEMO_BASE_EID      (APP_C_FW_APP_BASE_EID + 20)
-#define UDP_DEMO_BASE_EID       (APP_C_FW_APP_BASE_EID + 40)
+#define JMSG_DEMO_APP_BASE_EID  (EdsParam_APP_C_FW_APP_BASE_EID +  0)
+#define MQTT_DEMO_BASE_EID      (EdsParam_APP_C_FW_APP_BASE_EID + 20)
+#define UDP_DEMO_BASE_EID       (EdsParam_APP_C_FW_APP_BASE_EID + 40)
 
 #endif /* _app_cfg_ */

@@ -96,7 +96,7 @@ void UDP_DEMO_Constructor(UDP_DEMO_Class_t *UdpDemoPtr, const INITBL_Class_t *In
                 CFE_SB_ValueToMsgId(INITBL_GetIntConfig(IniTbl, CFG_JMSG_DEMO_UDP_RPI_TLM_TOPICID)),
                 sizeof(JMSG_DEMO_UdpRpiTlm_t));
    
-   UdpDemo->RpiTlmParamEntries = JMSG_DEMO_RpiTlmParams_Enum_t_MAX+1;
+   UdpDemo->RpiTlmParamEntries = EdsDataType_EdsEnum_JMSG_DEMO_RpiTlmParams_t_MAX+1;
    if (UdpDemo->RpiTlmParamEntries != RpiTlmParamEntries)
    {
       CFE_EVS_SendEvent(UDP_DEMO_CONSTRUCTOR_EID, CFE_EVS_EventType_ERROR,
@@ -129,7 +129,7 @@ void UDP_DEMO_CreateRpiCsvCmd(bool Init)
       strcpy(Payload->Name,"UDP RPI");
    }
 
-   memset(Payload->ParamText, 0, JMSG_PLATFORM_JMSG_PAYLOAD_STRING_MAX_LEN);
+   memset(Payload->ParamText, 0, EdsParam_JMSG_PLATFORM_JMSG_PAYLOAD_STRING_MAX_LEN);
    sprintf(ParamText,"\"cmd_code\": 0, \"cmd_param_1\": %d",UdpDemo->CreateRpiCsvCmdCnt);
    strcpy(Payload->ParamText, ParamText);
    
@@ -165,7 +165,7 @@ bool UDP_DEMO_CreateScriptCmd(bool Init)
    }
  
    memset(Payload->ScriptFile, 0, OS_MAX_PATH_LEN);
-   memset(Payload->ScriptText, 0, JMSG_PLATFORM_JMSG_PAYLOAD_STRING_MAX_LEN);
+   memset(Payload->ScriptText, 0, EdsParam_JMSG_PLATFORM_JMSG_PAYLOAD_STRING_MAX_LEN);
    
    if (UdpDemo->CreateScriptCmdCnt % 2)
    {

@@ -283,9 +283,9 @@ bool MQTT_DEMO_CsvToDiscreteTlm(const CFE_MSG_Message_t *TopicCsvCmd)
    
    memcpy(&LocalPayload, JMsgPayload, sizeof(JMSG_LIB_TopicCsvCmd_Payload_t));
 
-   CsvEntries = PktUtil_ParseCsvStr(LocalPayload.ParamText, JMsgDiscreteCsvEntry, JMSG_DEMO_DiscreteParams_Enum_t_MAX);
+   CsvEntries = PktUtil_ParseCsvStr(LocalPayload.ParamText, JMsgDiscreteCsvEntry, EdsDataType_EdsEnum_JMSG_DEMO_DiscreteParams_t_MAX);
    
-   if (CsvEntries == JMSG_DEMO_DiscreteParams_Enum_t_MAX)
+   if (CsvEntries == EdsDataType_EdsEnum_JMSG_DEMO_DiscreteParams_t_MAX)
    {
       memcpy(&MqttDemo->DiscreteTlm.Payload, &DiscreteTlm,  sizeof(JMSG_DEMO_MqttDiscreteTlm_Payload_t));
       CFE_SB_TimeStampMsg(CFE_MSG_PTR(MqttDemo->DiscreteTlm.TelemetryHeader));
@@ -297,7 +297,7 @@ bool MQTT_DEMO_CsvToDiscreteTlm(const CFE_MSG_Message_t *TopicCsvCmd)
    {
       CFE_EVS_SendEvent(MQTT_DEMO_CSV_TO_DISCRETE_TLM_EID, CFE_EVS_EventType_ERROR, 
                         "Incorrect number of discrete parameters. Received %d expected %d", 
-                        CsvEntries, JMSG_DEMO_DiscreteParams_Enum_t_MAX);         
+                        CsvEntries, EdsDataType_EdsEnum_JMSG_DEMO_DiscreteParams_t_MAX);         
    }
    
    return RetStatus;  
@@ -327,9 +327,9 @@ bool MQTT_DEMO_CsvToRateTlm(const CFE_MSG_Message_t *TopicCsvCmd)
    
    memcpy(&LocalPayload, JMsgPayload, sizeof(JMSG_LIB_TopicCsvCmd_Payload_t));
 
-   CsvEntries = PktUtil_ParseCsvStr(LocalPayload.ParamText, JMsgRateCsvEntry, JMSG_DEMO_RateParams_Enum_t_MAX);
+   CsvEntries = PktUtil_ParseCsvStr(LocalPayload.ParamText, JMsgRateCsvEntry, EdsDataType_EdsEnum_JMSG_DEMO_RateParams_t_MAX);
    
-   if (CsvEntries == JMSG_DEMO_RateParams_Enum_t_MAX)
+   if (CsvEntries == EdsDataType_EdsEnum_JMSG_DEMO_RateParams_t_MAX)
    {
       memcpy(&MqttDemo->RateTlm.Payload, &RateTlm,  sizeof(JMSG_DEMO_MqttRateTlm_Payload_t));
       CFE_SB_TimeStampMsg(CFE_MSG_PTR(MqttDemo->RateTlm.TelemetryHeader));
@@ -341,7 +341,7 @@ bool MQTT_DEMO_CsvToRateTlm(const CFE_MSG_Message_t *TopicCsvCmd)
    {
       CFE_EVS_SendEvent(MQTT_DEMO_CSV_TO_RATE_TLM_EID, CFE_EVS_EventType_ERROR, 
                         "Incorrect number of rate parameters. Received %d expected %d", 
-                        CsvEntries, JMSG_DEMO_RateParams_Enum_t_MAX);         
+                        CsvEntries, EdsDataType_EdsEnum_JMSG_DEMO_RateParams_t_MAX);         
    }
    
    return RetStatus;  

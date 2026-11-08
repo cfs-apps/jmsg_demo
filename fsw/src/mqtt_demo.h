@@ -66,9 +66,9 @@ typedef enum
 typedef struct
 {
 
-   JMSG_LIB_TopicCsvCmd_t        TopicCsvCmd;
-   JMSG_DEMO_MqttDiscreteTlm_t   DiscreteTlm;
-   JMSG_DEMO_MqttRateTlm_t       RateTlm;
+   EdsDataType_JMSG_LIB_TopicCsvCmd_t      TopicCsvCmd;
+   EdsDataType_JMSG_DEMO_MqttDiscreteTlm_t DiscreteTlm;
+   EdsDataType_JMSG_DEMO_MqttRateTlm_t     RateTlm;
       
    uint32  DiscreteTestData;
    uint32  CsvToDiscreteCnt;

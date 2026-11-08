@@ -71,7 +71,7 @@ typedef struct
    ** Telemetry Packets
    */
    
-   JMSG_DEMO_StatusTlm_t  SendStatusTlmMid;
+   JMSG_DEMO_StatusTlm_t  StatusTlm;
 
    
    /*
@@ -86,7 +86,7 @@ typedef struct
    JMSG_DEMO_UseCaseTlm_Enum_t UseCase;
 
    CFE_SB_MsgId_t  CmdMid;
-   CFE_SB_MsgId_t  SendStatusMid;
+   CFE_SB_MsgId_t  SendStatusTlmMid;
    CFE_SB_MsgId_t  JmsgTopicCsvTlmMid;
    
    MQTT_DEMO_Class_t MqttDemo;

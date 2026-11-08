@@ -65,9 +65,9 @@ typedef enum
 typedef struct
 {
 
-   JMSG_LIB_TopicCsvCmd_t     TopicCsvCmd;
-   JMSG_LIB_TopicScriptCmd_t  TopicScriptCmd;
-   JMSG_DEMO_UdpRpiTlm_t      RpiTlm;
+   EdsDataType_JMSG_LIB_TopicCsvCmd_t    TopicCsvCmd;
+   EdsDataType_JMSG_LIB_TopicScriptCmd_t TopicScriptCmd;
+   EdsDataType_JMSG_DEMO_UdpRpiTlm_t     RpiTlm;
    
    uint16  RpiTlmParamEntries;
    uint16  CreateRpiCsvCmdCnt;

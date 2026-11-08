@@ -44,7 +44,7 @@
 static void DispatchCsvTlmConverter(const CFE_MSG_Message_t *TopicCsvCmd);
 static int32 InitApp(void);
 static int32 ProcessCommands(void);
-static void SendStatusPkt(void);
+static void SendStatusTlm(void);
 static bool UseCaseChildTask(CHILDMGR_Class_t *ChildMgr);
 static const char *UseCaseStr(JMSG_DEMO_UseCaseTlm_Enum_t UseCase);
 
@@ -185,8 +185,8 @@ bool MQTT_DEMO_APP_StartUseCase(void *ObjDataPtr, const CFE_MSG_Message_t *MsgPt
    const JMSG_DEMO_StartUseCase_CmdPayload_t *Cmd = CMDMGR_PAYLOAD_PTR(MsgPtr, JMSG_DEMO_StartUseCase_t);
    bool RetStatus = false;
   
-   if (Cmd->UseCase >= JMSG_DEMO_UseCaseCmd_Enum_t_MIN &&
-       Cmd->UseCase <= JMSG_DEMO_UseCaseCmd_Enum_t_MAX)
+   if (Cmd->UseCase >= EdsDataType_EdsEnum_JMSG_DEMO_UseCaseCmd_t_MIN &&
+       Cmd->UseCase <= EdsDataType_EdsEnum_JMSG_DEMO_UseCaseCmd_t_MAX)
    {
       
       if (JMsgDemoApp.UseCaseRunning)
@@ -394,7 +394,7 @@ static int32 ProcessCommands(void)
          } 
          else if (CFE_SB_MsgId_Equal(MsgId, JMsgDemoApp.SendStatusTlmMid))
          {   
-            SendStatusPkt();
+            SendStatusTlm();
          }
          else if (CFE_SB_MsgId_Equal(MsgId, JMsgDemoApp.JmsgTopicCsvTlmMid))
          {   
@@ -423,10 +423,10 @@ static int32 ProcessCommands(void)
 
 
 /******************************************************************************
-** Function: SendStatusPkt
+** Function: SendStatusTlm
 **
 */
-void SendStatusPkt(void)
+void SendStatusTlm(void)
 {
    
    JMSG_DEMO_StatusTlm_Payload_t *Payload = &JMsgDemoApp.StatusTlm.Payload;
@@ -465,7 +465,7 @@ void SendStatusPkt(void)
    CFE_SB_TimeStampMsg(CFE_MSG_PTR(JMsgDemoApp.StatusTlm.TelemetryHeader));
    CFE_SB_TransmitMsg(CFE_MSG_PTR(JMsgDemoApp.StatusTlm.TelemetryHeader), true);
 
-} /* End SendStatusPkt() */
+} /* End SendStatusTlm() */
 
 
 /******************************************************************************
@@ -533,8 +533,8 @@ static const char *UseCaseStr(JMSG_DEMO_UseCaseTlm_Enum_t UseCase)
    
    uint8 i = JMSG_DEMO_UseCaseTlm_IDLE;
    
-   if ( UseCase >= JMSG_DEMO_UseCaseCmd_Enum_t_MIN &&
-        UseCase <= JMSG_DEMO_UseCaseCmd_Enum_t_MAX)
+   if ( UseCase >= EdsDataType_EdsEnum_JMSG_DEMO_UseCaseCmd_t_MIN &&
+        UseCase <= EdsDataType_EdsEnum_JMSG_DEMO_UseCaseCmd_t_MAX)
    {
       i = UseCase;
    }
